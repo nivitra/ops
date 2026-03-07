@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Ideas Showcase | Learnapart Ecosystems</title>
+    <!-- Premium Fonts: Outfit for display, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Lock Screen -->
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-container">
+            <h1 class="lock-title">Restricted Access</h1>
+            <p class="lock-subtitle">Please enter your 10-digit authorization key.</p>
+            <div class="lock-input-group">
+                <input type="password" id="passkeyInput" maxlength="10" placeholder="••••••••••" autocomplete="off">
+                <button id="unlockBtn" class="btn-primary">Unlock</button>
+            </div>
+            <p id="lockError" class="lock-error"></p>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden initially) -->
+    <div id="mainContent" style="display: none;">
+        <!-- Hero / Header Section -->
+        <header class="hero">
+            <div class="hero-inner">
+                <h1 class="hero-title">Project Vishwakarma MPS</h1>
+                <h2 class="hero-subtitle">Mission Problem Statement Selection Database Showcase</h2>
+            </div>
+        </header>
+
+        <!-- Controls Section: Search & Filter -->
+        <section class="controls-wrapper">
+            <div class="controls-container">
+                <div class="search-group">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search ideas, problems, or keywords...">
+                </div>
+
+                <div class="filter-group">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Domains</option>
+                        <!-- Options populated dynamically -->
+                    </select>
+
+                    <select id="riskFilter" class="filter-select">
+                        <option value="">Any Technical Risk</option>
+                        <option value="Low">Low Risk</option>
+                        <option value="Medium">Medium Risk</option>
+                        <option value="High">High Risk</option>
+                    </select>
+
+                    <select id="sortFilter" class="filter-select">
+                        <option value="scoreHigh">Top Overall Score</option>
+                        <option value="scoreLow">Lowest Overall Score</option>
+                        <option value="nameAsc">Alphabetical (A-Z)</option>
+                    </select>
+
+                    <button id="resetFiltersBtn" class="btn-outline">Reset</button>
+                </div>
+            </div>
+            <div class="results-meta">
+                <span id="resultsCount">Loading...</span>
+            </div>
+        </section>
+
+        <!-- Main Content: Idea Grid -->
+        <main class="grid-container" id="ideasGrid">
+            <!-- Cards populated via JS -->
+        </main>
+
+        <!-- Modal for Detailed Dashboard View -->
+        <div id="ideaModal" class="modal-overlay">
+            <div class="modal-window">
+                <div class="modal-header">
+                    <div class="modal-header-left">
+                        <span class="badge" id="modalCategory">Category</span>
+                        <span class="mono-id" id="modalId">ID</span>
+                        <h2 class="modal-title" id="modalTitle">Project Name</h2>
+                    </div>
+                    <button class="close-btn" aria-label="Close modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="modal-body" id="modalBody">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-brand">
+                    <span class="copyright">&copy; 2026 Learnapart ecosystems. All rights reserved.</span>
+                </div>
+                <div class="footer-disclaimer">
+                    <p><strong>Disclaimer:</strong> The conceptual matrices, scores, and strategies presented herein are
+                        for
+                        informational and analytical purposes only. Prior to execution, all models require rigorous
+                        independent validation of market viability, technical feasibility, and local regulatory
+                        compliance.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div> <!-- End Main Content -->
+
+    <!-- Load Data and Logic -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
