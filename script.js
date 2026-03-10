@@ -45,8 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('ideaModal');
     const modalBody = document.getElementById('modalBody');
     const closeModal = document.querySelector('.close-btn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 
     let currentData = [...startupIdeas];
+    let currentIdeaForPdf = null;
 
     // Initialization
     function init() {
@@ -165,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modal Dashboard Generator
     function openModal(idea) {
+        currentIdeaForPdf = idea;
         // Set Header static info
         document.getElementById('modalTitle').textContent = idea['Project Name'] || 'Project Details';
         document.getElementById('modalCategory').textContent = idea['Category'] || 'General';
@@ -331,6 +334,95 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     closeModal.addEventListener('click', closeModalWindow);
+
+    downloadPdfBtn.addEventListener('click', () => {
+        if (!currentIdeaForPdf) return;
+        const idea = currentIdeaForPdf;
+
+        const container = document.createElement('div');
+        container.style.padding = '40px';
+        container.style.fontFamily = 'Inter, sans-serif';
+        container.style.color = '#000';
+        container.style.background = '#fff';
+        container.style.width = '800px';
+
+        const header = document.createElement('div');
+        header.style.borderBottom = '2px solid #000';
+        header.style.paddingBottom = '20px';
+        header.style.marginBottom = '30px';
+
+        const title = document.createElement('h1');
+        title.style.margin = '0 0 10px 0';
+        title.style.fontSize = '2.5rem';
+        title.style.fontFamily = 'Outfit, sans-serif';
+        title.innerText = idea['Project Name'] || 'Project Details';
+
+        const mpsIdWrap = document.createElement('div');
+        mpsIdWrap.style.marginTop = '15px';
+
+        const mpsId = document.createElement('span');
+        mpsId.style.backgroundColor = '#ffff00';
+        mpsId.style.color = '#000';
+        mpsId.style.padding = '5px 10px';
+        mpsId.style.fontWeight = 'bold';
+        mpsId.style.fontSize = '1.2rem';
+        mpsId.style.border = '2px solid #000';
+        mpsId.style.borderRadius = '4px';
+        mpsId.style.fontFamily = 'monospace';
+        mpsId.innerText = `MPS ID: ${idea['MPS ID'] || 'N/A'}`;
+
+        mpsIdWrap.appendChild(mpsId);
+        header.appendChild(title);
+        header.appendChild(mpsIdWrap);
+        container.appendChild(header);
+
+        const content = document.createElement('div');
+
+        for (const [key, value] of Object.entries(idea)) {
+            if (key === 'Project Name' || key === 'MPS ID') continue;
+
+            const fieldBlock = document.createElement('div');
+            fieldBlock.style.marginBottom = '20px';
+            fieldBlock.style.pageBreakInside = 'avoid';
+
+            const label = document.createElement('strong');
+            label.style.display = 'block';
+            label.style.fontSize = '0.9rem';
+            label.style.marginBottom = '6px';
+            label.style.textTransform = 'uppercase';
+            label.style.letterSpacing = '0.05em';
+            label.style.borderBottom = '1px solid #eee';
+            label.style.paddingBottom = '4px';
+            label.style.color = '#555';
+            label.innerText = key;
+
+            const val = document.createElement('div');
+            val.style.fontSize = '0.95rem';
+            val.style.lineHeight = '1.6';
+            val.style.whiteSpace = 'pre-wrap';
+            val.innerText = value || '—';
+
+            fieldBlock.appendChild(label);
+            fieldBlock.appendChild(val);
+            content.appendChild(fieldBlock);
+        }
+
+        container.appendChild(content);
+
+        const opt = {
+            margin: 0.5,
+            filename: `${idea['MPS ID'] || 'idea'}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        downloadPdfBtn.innerText = 'Generating...';
+        html2pdf().set(opt).from(container).save().then(() => {
+            downloadPdfBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF`;
+        });
+    });
+
     document.getElementById('ideaModal').addEventListener('click', (e) => {
         if (e.target.id === 'ideaModal') closeModalWindow();
     });
