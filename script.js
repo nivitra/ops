@@ -225,6 +225,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="dd-header">👨‍👩‍👧‍👦 Family Structure Fit</div>
                         <div class="dd-content">${safeText(idea['family structure fit'])}</div>
                     </div>` : ''}
+                    
+                    ${idea['VIRAL Mechanics'] ? `
+                    <div class="deep-dive-card">
+                        <div class="dd-header">🚀 Viral Mechanics</div>
+                        <div class="dd-content">${safeText(idea['VIRAL Mechanics'])}</div>
+                    </div>` : ''}
+                    
+                    ${idea['BENCHMARK'] ? `
+                    <div class="deep-dive-card">
+                        <div class="dd-header">📊 Benchmark</div>
+                        <div class="dd-content">${safeText(idea['BENCHMARK'])}</div>
+                    </div>` : ''}
                 </div>
             </div>
         `;
@@ -251,8 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="score-row"><span class="score-name">Infra Gap</span> ${genBar(idea['Infra Gap Score'])}</div>
                         <div class="score-row"><span class="score-name">Market Vacuum</span> ${genBar(idea['Market Vacuum'])}</div>
                         <div class="score-row"><span class="score-name">Problem Specificity</span> ${genBar(idea['Specificity'])}</div>
+                        <div class="score-row"><span class="score-name">Problem Observability</span> ${genBar(idea['Observability'])}</div>
                         <div class="score-row"><span class="score-name">Problem Frequency</span> ${genBar(idea['Frequency'])}</div>
                         <div class="score-row"><span class="score-name">Problem Intensity</span> ${genBar(idea['Intensity'])}</div>
+                        
+                        <!-- Founder Fit & Reach -->
+                        <div class="score-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-subtle);"><span class="score-name">Personal Fit</span> ${genBar(idea['Personal Fit (1-5)'])}</div>
+                        <div class="score-row"><span class="score-name">Reach</span> ${genBar(idea['Reach (1-5)'])}</div>
+                        <div class="score-row"><span class="score-name">Depth</span> ${genBar(idea['Depth (1-5)'])}</div>
                     </div>
                 </div>
 
@@ -262,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="sh-card">
                             <div class="sh-role">End User</div>
                             <div class="sh-stats">
+                                <span style="grid-column: span 2; color: var(--text-color); font-weight:600; padding-bottom: 0.2rem;">${idea['Primary User'] || 'General Business'}</span>
                                 <span>Pwr: ${idea['User Power'] || '-'}</span>
                                 <span>Int: ${idea['User Interest'] || '-'}</span>
                             </div>
@@ -291,6 +310,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="kb-section">
+                    <h3 class="kb-title">Metrics & Impact</h3>
+                    <div class="metrics-grid" style="margin-bottom: 1rem;">
+                        <div class="m-item">
+                            <span class="m-label">Output Metric</span>
+                            <span class="m-value" style="font-size:1.1rem; margin-top:0.5rem;">${safeText(idea['Output Metric'])}</span>
+                        </div>
+                        <div class="m-item">
+                            <span class="m-label">Outcome Metric</span>
+                            <span class="m-value" style="font-size:1.1rem; margin-top:0.5rem;">${safeText(idea['Outcome Metric'])}</span>
+                        </div>
+                        <div class="m-item">
+                            <span class="m-label">Impact Metric</span>
+                            <span class="m-value" style="font-size:1.1rem; margin-top:0.5rem;">${safeText(idea['Impact Metric'])}</span>
+                        </div>
+                    </div>
+                    <div style="padding: 0.8rem; background: var(--surface-bg); border: 1px solid var(--border-subtle); border-radius: 8px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform:uppercase; font-weight:600; display:block; margin-bottom:0.3rem;">Primary Impact Target</span>
+                        <span style="font-size: 0.95rem; font-weight:500;">${safeText(idea['Primary Impact Target'])}</span>
+                    </div>
+                </div>
+
+                <div class="kb-section">
                     <h3 class="kb-title">Execution Engine</h3>
                     <div class="timeline">
                         <div class="tl-item">
@@ -309,7 +350,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="tl-phase">Build Phase</div>
                             <div class="tl-desc">${safeText(idea['Build MVP Phase (W3-8)'])}</div>
                         </div>
+                        <div class="tl-item">
+                            <div class="tl-phase">Time Estimate</div>
+                            <div class="tl-desc"><strong>Total:</strong> ${safeText(idea['Timeframe'])} | <strong>MVP:</strong> ${safeText(idea['MVP Time Estimate'])}</div>
+                        </div>
+                        <div class="tl-item">
+                            <div class="tl-phase">Risks & Gaps</div>
+                            <div class="tl-desc"><strong>Top Risk:</strong> ${safeText(idea['Highest Risk Category'])}<br><strong>Resource Gap:</strong> ${safeText(idea['Biggest Resource Gap'])}</div>
+                        </div>
                     </div>
+                    
+                    <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="padding: 0.8rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px;">
+                            <p style="font-size: 0.8rem; text-transform:uppercase; color: #10b981; font-weight:600; margin-bottom: 0.3rem;">Success Defined</p>
+                            <p style="font-size: 0.9rem; font-weight:500; color: var(--text-color);">${safeText(idea['Success Defined'])}</p>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                            <p style="font-size: 0.8rem; text-transform:uppercase; color: #ef4444; font-weight:600; margin-bottom: 0.3rem;">Failure Defined</p>
+                            <p style="font-size: 0.9rem; font-weight:500; color: var(--text-color);">${safeText(idea['Failure Defined'])}</p>
+                        </div>
+                    </div>
+
                     <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
                         <p style="font-size: 0.8rem; text-transform:uppercase; color: var(--text-muted); font-weight:600;">Kill Condition</p>
                         <p style="font-size: 0.95rem; font-weight:500;">${safeText(idea['Kill Condition'])}</p>
@@ -343,27 +404,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const content = [];
         
-        // Header
-        content.push({ text: idea['Project Name'] || 'Project Details', style: 'header' });
-        
-        // MPS ID
-        content.push({ 
-            text: ` MPS ID: ${idea['MPS ID'] || 'N/A'} `, 
-            style: 'mpsId' 
+        // Premium Header
+        content.push({
+            stack: [
+                { text: idea['Project Name'] || 'Project Details', style: 'header' },
+                { text: `MPS ID: ${idea['MPS ID'] || 'N/A'}  •  ${idea['Category'] || 'General'}`, style: 'subHeader' }
+            ],
+            margin: [0, 0, 0, 10]
         });
 
-        // Add a line separator
+        // Add a primary separator
         content.push({
-            canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: '#000000' }],
-            margin: [0, 10, 0, 20]
+            canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: '#1a1a1a' }],
+            margin: [0, 0, 0, 20]
         });
 
         // Group fields into short metrics and long text for a better layout
         const shortFields = [];
         const longFields = [];
+        const excludeFields = ['Project Name', 'MPS ID', 'Category'];
 
         for (const [key, value] of Object.entries(idea)) {
-            if (key === 'Project Name' || key === 'MPS ID') continue;
+            if (excludeFields.includes(key)) continue;
             
             const valStr = String(value || '—');
             if (valStr.length < 50 && !valStr.includes('\n')) {
@@ -400,15 +462,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (shortFields.length > 0) {
            content.push({
-                canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 0.5, lineColor: '#dddddd' }],
+                canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: '#eeeeee' }],
                 margin: [0, 10, 0, 20]
             });
         }
 
         // Add long fields
         for (const field of longFields) {
-            content.push({ text: field.key.toUpperCase(), style: 'fieldLabel' });
-            content.push({ text: field.value, style: 'fieldValue' });
+            content.push({ text: field.key.toUpperCase(), style: 'fieldLabelLong' });
+            content.push({ text: field.value, style: 'fieldValueLong' });
         }
 
         const docDefinition = {
@@ -418,34 +480,49 @@ document.addEventListener('DOMContentLoaded', () => {
             content: content,
             styles: {
                 header: {
-                    fontSize: 24,
+                    fontSize: 26,
                     bold: true,
-                    margin: [0, 0, 0, 5],
-                    color: '#111111'
+                    color: '#000000',
+                    margin: [0, 0, 0, 5]
                 },
-                mpsId: {
-                    fontSize: 12,
+                subHeader: {
+                    fontSize: 11,
+                    color: '#666666',
                     bold: true,
-                    background: '#ffff00',
-                    margin: [0, 0, 0, 10]
+                    characterSpacing: 1
                 },
                 fieldLabel: {
-                    fontSize: 9,
+                    fontSize: 8,
                     bold: true,
-                    color: '#666666',
-                    margin: [0, 10, 0, 4]
+                    color: '#888888',
+                    characterSpacing: 0.5,
+                    margin: [0, 5, 0, 2]
                 },
                 fieldValue: {
                     fontSize: 11,
-                    lineHeight: 1.4,
-                    margin: [0, 0, 0, 15],
-                    color: '#222222'
+                    bold: true,
+                    color: '#111111',
+                    margin: [0, 0, 0, 12]
+                },
+                fieldLabelLong: {
+                    fontSize: 10,
+                    bold: true,
+                    color: '#444444',
+                    margin: [0, 10, 0, 4],
+                    decoration: 'underline',
+                    decorationColor: '#cccccc'
+                },
+                fieldValueLong: {
+                    fontSize: 11,
+                    lineHeight: 1.5,
+                    color: '#222222',
+                    margin: [0, 0, 0, 15]
                 }
             },
             defaultStyle: {
                 font: 'Roboto'
             },
-            pageMargins: [40, 40, 40, 40]
+            pageMargins: [50, 50, 50, 50]
         };
 
         try {
