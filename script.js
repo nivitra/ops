@@ -339,88 +339,132 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentIdeaForPdf) return;
         const idea = currentIdeaForPdf;
 
-        const container = document.createElement('div');
-        container.style.padding = '40px';
-        container.style.fontFamily = 'Inter, sans-serif';
-        container.style.color = '#000';
-        container.style.background = '#fff';
-        container.style.width = '800px';
+        downloadPdfBtn.innerText = 'Generating...';
 
-        const header = document.createElement('div');
-        header.style.borderBottom = '2px solid #000';
-        header.style.paddingBottom = '20px';
-        header.style.marginBottom = '30px';
+        const content = [];
+        
+        // Header
+        content.push({ text: idea['Project Name'] || 'Project Details', style: 'header' });
+        
+        // MPS ID
+        content.push({ 
+            text: ` MPS ID: ${idea['MPS ID'] || 'N/A'} `, 
+            style: 'mpsId' 
+        });
 
-        const title = document.createElement('h1');
-        title.style.margin = '0 0 10px 0';
-        title.style.fontSize = '2.5rem';
-        title.style.fontFamily = 'Outfit, sans-serif';
-        title.innerText = idea['Project Name'] || 'Project Details';
+        // Add a line separator
+        content.push({
+            canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: '#000000' }],
+            margin: [0, 10, 0, 20]
+        });
 
-        const mpsIdWrap = document.createElement('div');
-        mpsIdWrap.style.marginTop = '15px';
-
-        const mpsId = document.createElement('span');
-        mpsId.style.backgroundColor = '#ffff00';
-        mpsId.style.color = '#000';
-        mpsId.style.padding = '5px 10px';
-        mpsId.style.fontWeight = 'bold';
-        mpsId.style.fontSize = '1.2rem';
-        mpsId.style.border = '2px solid #000';
-        mpsId.style.borderRadius = '4px';
-        mpsId.style.fontFamily = 'monospace';
-        mpsId.innerText = `MPS ID: ${idea['MPS ID'] || 'N/A'}`;
-
-        mpsIdWrap.appendChild(mpsId);
-        header.appendChild(title);
-        header.appendChild(mpsIdWrap);
-        container.appendChild(header);
-
-        const content = document.createElement('div');
+        // Group fields into short metrics and long text for a better layout
+        const shortFields = [];
+        const longFields = [];
 
         for (const [key, value] of Object.entries(idea)) {
             if (key === 'Project Name' || key === 'MPS ID') continue;
-
-            const fieldBlock = document.createElement('div');
-            fieldBlock.style.marginBottom = '20px';
-            fieldBlock.style.pageBreakInside = 'avoid';
-
-            const label = document.createElement('strong');
-            label.style.display = 'block';
-            label.style.fontSize = '0.9rem';
-            label.style.marginBottom = '6px';
-            label.style.textTransform = 'uppercase';
-            label.style.letterSpacing = '0.05em';
-            label.style.borderBottom = '1px solid #eee';
-            label.style.paddingBottom = '4px';
-            label.style.color = '#555';
-            label.innerText = key;
-
-            const val = document.createElement('div');
-            val.style.fontSize = '0.95rem';
-            val.style.lineHeight = '1.6';
-            val.style.whiteSpace = 'pre-wrap';
-            val.innerText = value || '—';
-
-            fieldBlock.appendChild(label);
-            fieldBlock.appendChild(val);
-            content.appendChild(fieldBlock);
+            
+            const valStr = String(value || '—');
+            if (valStr.length < 50 && !valStr.includes('\n')) {
+                shortFields.push({ key, value: valStr });
+            } else {
+                longFields.push({ key, value: valStr });
+            }
         }
 
-        container.appendChild(content);
+        // Add short fields as a neat multi-column grid
+        const columns = [];
+        for (let i = 0; i < shortFields.length; i += 2) {
+            const row = [];
+            row.push({
+                stack: [
+                    { text: shortFields[i].key.toUpperCase(), style: 'fieldLabel' },
+                    { text: shortFields[i].value, style: 'fieldValue' }
+                ],
+                width: '50%'
+            });
+            if (i + 1 < shortFields.length) {
+                row.push({
+                    stack: [
+                        { text: shortFields[i + 1].key.toUpperCase(), style: 'fieldLabel' },
+                        { text: shortFields[i + 1].value, style: 'fieldValue' }
+                    ],
+                    width: '50%'
+                });
+            } else {
+                row.push({ text: '', width: '50%' });
+            }
+            content.push({ columns: row, columnGap: 20 });
+        }
 
-        const opt = {
-            margin: 0.5,
-            filename: `${idea['MPS ID'] || 'idea'}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        if (shortFields.length > 0) {
+           content.push({
+                canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 0.5, lineColor: '#dddddd' }],
+                margin: [0, 10, 0, 20]
+            });
+        }
+
+        // Add long fields
+        for (const field of longFields) {
+            content.push({ text: field.key.toUpperCase(), style: 'fieldLabel' });
+            content.push({ text: field.value, style: 'fieldValue' });
+        }
+
+        const docDefinition = {
+            info: {
+                title: `${idea['MPS ID'] || 'idea'}`,
+            },
+            content: content,
+            styles: {
+                header: {
+                    fontSize: 24,
+                    bold: true,
+                    margin: [0, 0, 0, 5],
+                    color: '#111111'
+                },
+                mpsId: {
+                    fontSize: 12,
+                    bold: true,
+                    background: '#ffff00',
+                    margin: [0, 0, 0, 10]
+                },
+                fieldLabel: {
+                    fontSize: 9,
+                    bold: true,
+                    color: '#666666',
+                    margin: [0, 10, 0, 4]
+                },
+                fieldValue: {
+                    fontSize: 11,
+                    lineHeight: 1.4,
+                    margin: [0, 0, 0, 15],
+                    color: '#222222'
+                }
+            },
+            defaultStyle: {
+                font: 'Roboto'
+            },
+            pageMargins: [40, 40, 40, 40]
         };
 
-        downloadPdfBtn.innerText = 'Generating...';
-        html2pdf().set(opt).from(container).save().then(() => {
-            downloadPdfBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF`;
-        });
+        try {
+            pdfMake.createPdf(docDefinition).download(`${idea['MPS ID'] || 'idea'}.pdf`, () => {
+                setTimeout(() => {
+                    downloadPdfBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF`;
+                }, 500);
+            });
+            // Fallback for browsers exactly where callbacks fail
+            setTimeout(() => {
+                const btnContent = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF`;
+                if(downloadPdfBtn.innerHTML !== btnContent) {
+                   downloadPdfBtn.innerHTML = btnContent;
+                }
+            }, 3000);
+        } catch(err) {
+            console.error(err);
+            downloadPdfBtn.innerHTML = 'Error Generating';
+        }
     });
 
     document.getElementById('ideaModal').addEventListener('click', (e) => {
