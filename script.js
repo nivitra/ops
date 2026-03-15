@@ -231,6 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="dd-header">🚀 Viral Mechanics</div>
                         <div class="dd-content">${safeText(idea['VIRAL Mechanics'])}</div>
                     </div>` : ''}
+
+                    ${idea['first principle approach'] ? `
+                    <div class="deep-dive-card">
+                        <div class="dd-header">🧠 First Principle Approach</div>
+                        <div class="dd-content">${safeText(idea['first principle approach'])}</div>
+                    </div>` : ''}
                     
                     ${idea['BENCHMARK'] ? `
                     <div class="deep-dive-card">
