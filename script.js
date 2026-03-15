@@ -196,10 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="kb-section">
                     <h3 class="kb-title">Strategic Deep Dives</h3>
                     
-                    ${idea['INDIAN market suggestion'] ? `
+                    ${idea['indian specifics'] ? `
                     <div class="deep-dive-card">
                         <div class="dd-header">🇮🇳 India Market Optimization</div>
-                        <div class="dd-content">${safeText(idea['INDIAN market suggestion'])}</div>
+                        <div class="dd-content">${safeText(idea['indian specifics'])}</div>
                     </div>` : ''}
                     
                     ${idea['JUGAAD'] ? `
@@ -404,13 +404,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const content = [];
         
-        // Premium Header
+        // Premium Header with highlighted MPS ID
         content.push({
-            stack: [
-                { text: idea['Project Name'] || 'Project Details', style: 'header' },
-                { text: `MPS ID: ${idea['MPS ID'] || 'N/A'}  •  ${idea['Category'] || 'General'}`, style: 'subHeader' }
+            columns: [
+                {
+                    stack: [
+                        { text: idea['Project Name'] || 'Project Details', style: 'header' },
+                        { text: idea['Category'] || 'General', style: 'subHeader' }
+                    ],
+                    width: '*'
+                },
+                {
+                    table: {
+                        widths: ['auto'],
+                        body: [
+                            [{ text: `MPS ID: ${idea['MPS ID'] || 'N/A'}`, style: 'mpsIdBadge' }]
+                        ]
+                    },
+                    layout: 'noBorders',
+                    width: 'auto'
+                }
             ],
-            margin: [0, 0, 0, 10]
+            margin: [0, 0, 0, 15]
         });
 
         // Add a primary separator
@@ -482,14 +497,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 header: {
                     fontSize: 26,
                     bold: true,
-                    color: '#000000',
-                    margin: [0, 0, 0, 5]
+                    color: '#111827',
+                    margin: [0, 0, 0, 6]
                 },
                 subHeader: {
-                    fontSize: 11,
-                    color: '#666666',
+                    fontSize: 12,
+                    color: '#6b7280',
                     bold: true,
-                    characterSpacing: 1
+                    characterSpacing: 1,
+                    textTransform: 'uppercase'
+                },
+                mpsIdBadge: {
+                    fontSize: 12,
+                    bold: true,
+                    color: '#000000',
+                    fillColor: '#fde047',
+                    margin: [10, 6, 10, 6]
                 },
                 fieldLabel: {
                     fontSize: 8,
